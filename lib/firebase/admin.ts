@@ -26,7 +26,7 @@ export const adminDb = admin.database();
 export async function verifyFirebaseToken(token: string) {
   try {
     return await adminAuth.verifySessionCookie(token, true);
-  } catch (error) {
+  } catch {
     return null;
   }
 }
