@@ -2,6 +2,13 @@ import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getDatabase } from 'firebase/database';
 
+/**
+ * Firebase Client SDK Configuration
+ *
+ * Centralized initialization for client-side Firebase services.
+ * Features safe initialization checks to avoid errors during Next.js build-time
+ * when environment variables may be missing.
+ */
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -14,11 +21,22 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase only if it hasn't been initialized and we have an API key
-const app = (getApps().length > 0) 
-  ? getApp() 
-  : (process.env.NEXT_PUBLIC_FIREBASE_API_KEY ? initializeApp(firebaseConfig) : null);
+const app =
+  getApps().length > 0
+    ? getApp()
+    : process.env.NEXT_PUBLIC_FIREBASE_API_KEY
+      ? initializeApp(firebaseConfig)
+      : null;
 
-export const auth = app ? getAuth(app) : {} as ReturnType<typeof getAuth>;
-export const db = app ? getDatabase(app) : {} as ReturnType<typeof getDatabase>;
+/**
+ * Firebase Auth client instance.
+ * Type-safe fallback provided for non-initialized states.
+ */
+export const auth = app ? getAuth(app) : ({} as ReturnType<typeof getAuth>);
+
+/**
+ * Firebase Realtime Database client instance.
+ */
+export const db = app ? getDatabase(app) : ({} as ReturnType<typeof getDatabase>);
 
 export default app;

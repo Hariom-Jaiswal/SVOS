@@ -1,4 +1,4 @@
-import { calculateCrowdScore, attachTrend, ZoneMetrics } from '@/lib/engines/crowdEngine';
+import { calculateCrowdScore, attachTrend, ZoneMetrics } from '../lib/engines/crowdEngine';
 
 describe('Crowd Intelligence Engine', () => {
   it('correctly categorizes low congestion', () => {

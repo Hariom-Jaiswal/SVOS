@@ -1,25 +1,41 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import { CrowdScore } from '../engines/crowdEngine';
+import { AIError } from '../security/errors';
 
 // Initialize the Gemini client using the environment variable string
 const apiKey = process.env.GEMINI_API_KEY || '';
 export const genAI = new GoogleGenerativeAI(apiKey);
 
-import { CrowdScore } from '../engines/crowdEngine';
-
+/**
+ * Real-time context used by the AI to provide situational awareness
+ */
 export interface VenueContext {
+  /** Map of zone IDs to their computed crowd scores */
   zones: Record<string, CrowdScore>;
+  /** Map of vendor/service IDs to queue performance metrics */
   queues: Record<string, { waitMin: number; serviceRate: number }>;
+  /** Active safety or operational alerts */
   alerts: Record<string, { priority: string; message: string }>;
+  /** The specific zone ID where the user is currently located */
   userZone: string;
+  /** Progression of the event (e.g., Pre-game, Halftime) */
   eventPhase: string;
 }
 
+/**
+ * Queries the Gemini AI assistant with live venue context.
+ *
+ * @param userQuery - The natural language question from the attendee
+ * @param venueContext - Filtered contextual data for the model to ground its response
+ * @returns A Promise resolving to the AI's response text
+ * @throws {AIError} if the API key is missing or model generation fails
+ */
 export async function askVenueAssistant(
   userQuery: string,
   venueContext: VenueContext,
 ): Promise<string> {
   if (!apiKey) {
-    return 'Error: Gemini API key is missing. Ensure GEMINI_API_KEY is correctly set via environment variables.';
+    throw new AIError('Gemini API key is missing. Check environment variables.', 'CRITICAL');
   }
 
   try {
@@ -42,7 +58,8 @@ export async function askVenueAssistant(
     const result = await model.generateContent([systemPrompt, userQuery]);
     return result.response.text();
   } catch (error) {
+    if (error instanceof AIError) throw error;
     console.error('Gemini error:', error);
-    return 'I am currently unable to process your request. Please check your connection or wait a moment before trying again.';
+    throw new AIError('Failed to generate AI response. Service may be overloaded.');
   }
 }

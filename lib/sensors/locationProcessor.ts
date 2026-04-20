@@ -1,4 +1,4 @@
-import { LocationUpdate } from '@/types/sensor';
+import { LocationUpdate } from '../../types/sensor';
 import { resolveZone } from './zoneResolver';
 // import { db } from '../firebase/config'; // Real implementation
 

@@ -1,4 +1,4 @@
-import { evaluateNudges, NudgeContext } from '@/lib/engines/nudgeEngine';
+import { evaluateNudges, NudgeContext } from '../lib/engines/nudgeEngine';
 
 describe('Smart Nudging Engine', () => {
   const mockContext: NudgeContext = {

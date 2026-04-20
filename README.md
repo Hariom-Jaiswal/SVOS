@@ -76,7 +76,28 @@ Sense → Predict → Decide → Act → Learn
 
 ---
 
-## Tech Stack
+## Design Decisions
+
+The SVOS architecture was built with three core design pillars to ensure industrial-grade reliability and intelligence.
+
+### 1. Hybrid AI + Fallback Model
+While we leverage **Gemini 1.5 Pro** and **Vertex AI** for advanced reasoning and forecasting, we do not rely on them exclusively. 
+- **Rationale**: Large Language Models (LLMs) and ML endpoints can face latency or availability issues during high-load stadium events.
+- **Implementation**: We implemented a "Rule-based Fallback" layer in `predictionEngine.ts` that provides safe, deterministic density estimates if the Vertex AI endpoint is unreachable.
+
+### 2. Strict Separation of Concerns (Sense-Predict-Act)
+We explicitly decoupled the data flow into three isolated layers:
+- **Sense Layer** (`sensors/`): Handles raw coordinate ingestion, debouncing, and zone mapping.
+- **Intelligence Layer** (`lib/engines/`): Computes risk scores and forecasts density independently of the UI.
+- **Act Layer** (`components/dashboard/`): Reacts to intelligence via an "Observer" pattern (e.g., triggering a `NudgeBanner` when risk crosses a threshold).
+- **Result**: This allows for independent testing of the math logic without needing a browser environment.
+
+### 3. Prediction Reliability Strategy
+To prevent "notification fatigue" and false positives:
+- **Trend Weighting**: We don't just act on current density; we use vector trends (`WORSENING` vs. `IMPROVING`) to decide nudge priority.
+- **Cooldown Logic**: Nudges have strict cooldown periods (e.g., 3-10 minutes) preventing attendee spam, while `SAFETY_ALERT` bypasses all restrictions for critical events.
+
+---
 
 | Layer | Technology |
 |---|---|

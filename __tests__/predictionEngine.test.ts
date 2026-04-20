@@ -1,4 +1,4 @@
-import { predictDensityRuleBased, PredictionInput } from '@/lib/engines/predictionEngine';
+import { predictDensityRuleBased, PredictionInput } from '../lib/engines/predictionEngine';
 
 describe('Prediction Intelligence Engine', () => {
   it('correctly predicts rising density over time based on inflow', () => {

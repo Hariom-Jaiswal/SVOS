@@ -2,13 +2,13 @@
 // Jest runs in CJS mode, so we fully mock the rateLimiter module
 // to avoid the ESM parse error. All tests validate the mock contract.
 
-jest.mock('@/lib/security/rateLimiter', () => ({
+jest.mock('../lib/security/rateLimiter', () => ({
   ratelimit: { limit: jest.fn() },
   checkRateLimit: jest.fn(),
 }));
 
 // Import AFTER jest.mock() so we receive the mocked version
-import { checkRateLimit } from '@/lib/security/rateLimiter';
+import { checkRateLimit } from '../lib/security/rateLimiter';
 
 const mockCheckRateLimit = jest.mocked(checkRateLimit);
 

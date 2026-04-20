@@ -1,6 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
+import { MetricCard } from '@/components/operator/MetricCard';
+import { OperatorSummary } from '@/components/operator/OperatorSummary';
+
 // Mock live data payload for the operator dashboard
 const MOCK_ZONES = [
   { id: 'Z_NTH', name: 'North Gate', score: 88, trend: 'WORSENING', status: 'CRITICAL' },
@@ -8,16 +11,30 @@ const MOCK_ZONES = [
   { id: 'Z_WST', name: 'West Wing Corridor', score: 12, trend: 'IMPROVING', status: 'LOW' },
 ];
 
+/**
+ * Operator Command Center
+ * 
+ * DESIGN DECISION: SEPARATION OF CONCERNS
+ * The page acts as a "Controller" that aggregates data and orchestrates
+ * the display, while cards and summaries handle their own internal rendering logic.
+ */
 export default function OperatorPage() {
   const [activeTab, setActiveTab] = useState<'metrics' | 'nudges'>('metrics');
 
+  const stats = useMemo(() => {
+    const totalZones = MOCK_ZONES.length;
+    const criticalZones = MOCK_ZONES.filter((z) => z.status === 'CRITICAL').length;
+    const avgRisk = MOCK_ZONES.reduce((acc, z) => acc + z.score, 0) / totalZones;
+    return { totalZones, criticalZones, avgRisk };
+  }, []);
+
   return (
-    <div className="h-full flex flex-col space-y-8 max-w-7xl mx-auto">
-      <div className="flex justify-between items-end border-b border-white/20 pb-4">
+    <div className="h-full flex flex-col space-y-8 max-w-7xl mx-auto px-4 lg:px-0">
+      <div className="flex justify-between items-end">
         <div>
-          <h2 className="text-4xl font-extrabold tracking-tight">ZONE MATRICES</h2>
+          <h2 className="text-4xl font-extrabold tracking-tight">OPERATIONS</h2>
           <p className="text-sm opacity-60 mt-1 uppercase tracking-widest">
-            Real-time spatial heuristics
+            Command & Control Interface
           </p>
         </div>
         <div className="flex space-x-2">
@@ -36,44 +53,18 @@ export default function OperatorPage() {
         </div>
       </div>
 
+      <OperatorSummary {...stats} />
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {MOCK_ZONES.map((zone) => (
-          <div
-            key={zone.id}
-            className="border border-white/20 bg-[#111] p-6 hover:border-white/50 transition-colors"
-          >
-            <div className="flex justify-between items-start mb-4">
-              <h3 className="font-bold tracking-widest uppercase">{zone.name}</h3>
-              <span
-                className={`text-xs font-black uppercase px-2 py-1 ${zone.status === 'CRITICAL' ? 'bg-[#ff0000] text-white' : 'bg-white/10 text-white/80'}`}
-              >
-                {zone.status}
-              </span>
-            </div>
-
-            <div className="mt-8 flex items-end justify-between">
-              <div>
-                <p className="text-[10px] uppercase tracking-widest opacity-50 mb-1">Risk Index</p>
-                <div className="text-5xl font-light">
-                  {zone.score}
-                  <span className="text-2xl opacity-50">/100</span>
-                </div>
-              </div>
-
-              <div className="text-right">
-                <p className="text-[10px] uppercase tracking-widest opacity-50 mb-1">
-                  Vector Trend
-                </p>
-                <div
-                  className={`text-sm font-bold tracking-widest ${zone.trend === 'WORSENING' ? 'text-[#ff0000]' : 'text-white'}`}
-                >
-                  {zone.trend === 'WORSENING' ? '↑' : zone.trend === 'IMPROVING' ? '↓' : '→'}{' '}
-                  {zone.trend}
-                </div>
-              </div>
-            </div>
+        {activeTab === 'metrics' ? (
+          MOCK_ZONES.map((zone) => (
+            <MetricCard key={zone.id} {...zone} />
+          ))
+        ) : (
+          <div className="lg:col-span-3 py-20 border border-dashed border-white/20 text-center">
+            <p className="text-xs uppercase tracking-widest opacity-40">No active automated nudges in the last 15 minutes</p>
           </div>
-        ))}
+        )}
       </div>
     </div>
   );
