@@ -1,4 +1,16 @@
 import React from 'react';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'SVOS | Attendee Dashboard',
+  description:
+    'Real-time venue intelligence and crowd-aware navigation for Smart Venue Operating System.',
+  openGraph: {
+    title: 'SVOS | Attendee Dashboard',
+    description: 'Real-time safety and convenience for your stadium experience.',
+    type: 'website',
+  },
+};
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (

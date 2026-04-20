@@ -4,10 +4,10 @@ import { evaluateNudges } from '../lib/engines/nudgeEngine';
 
 /**
  * INTEGRATION TEST: SENSE -> PREDICT -> ACT
- * 
+ *
  * This suite verifies the core "Intelligence Loop" of SVOS.
- * It simulates a venue state where sensors detect rising congestion, 
- * the prediction engine forecasts critical levels, and the nudge 
+ * It simulates a venue state where sensors detect rising congestion,
+ * the prediction engine forecasts critical levels, and the nudge
  * engine decides to trigger a safety alert.
  */
 describe('SVOS Intelligence Loop [Sense-Predict-Act]', () => {
@@ -42,14 +42,18 @@ describe('SVOS Intelligence Loop [Sense-Predict-Act]', () => {
     const nudge = evaluateNudges({
       uid: 'staff-001',
       currentZone: 'Z_NTH',
-      zoneScore: { 
-        ...currentScore, 
-        rawScore: predictedDensity, 
+      zoneScore: {
+        ...currentScore,
+        rawScore: predictedDensity,
         congestionLevel: 'CRITICAL',
-        riskScore: Math.round(predictedDensity * 100) 
+        riskScore: Math.round(predictedDensity * 100),
       },
       nearbyZones: [
-        { id: 'Z_FDC', name: 'Food Court', score: { rawScore: 0.2, congestionLevel: 'LOW', riskScore: 20, trend: 'STABLE' } }
+        {
+          id: 'Z_FDC',
+          name: 'Food Court',
+          score: { rawScore: 0.2, congestionLevel: 'LOW', riskScore: 20, trend: 'STABLE' },
+        },
       ],
       lastNudgeSentAt: 0,
       preferences: { accessibility: false, language: 'en' },

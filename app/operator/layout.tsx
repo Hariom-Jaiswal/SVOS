@@ -1,4 +1,14 @@
 import React from 'react';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'SVOS | Operator Command Center',
+  description: 'Mission-critical arena management and crowd safety intelligence.',
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default function OperatorLayout({ children }: { children: React.ReactNode }) {
   return (

@@ -5,9 +5,9 @@ import { AppError } from '../../../lib/security/errors';
 
 /**
  * API Route: /api/chat
- * 
+ *
  * Handles conversational queries from attendees.
- * 
+ *
  * DESIGN DECISION: HYBRID AI + SECURITY
  * Uses Gemini 1.5 Pro for response generation, but requires a valid
  * Firebase session cookie for access. Implements strict input validation.

@@ -7,7 +7,7 @@ const PROTECTED_ROUTES = ['/dashboard', '/operator', '/vendor', '/api/chat'];
 
 /**
  * DESIGN DECISION: SECURITY HARDENING (Rate Limiting)
- * We implement granular rate limiting for high-cost AI endpoints to prevent 
+ * We implement granular rate limiting for high-cost AI endpoints to prevent
  * denial-of-wallet attacks and ensure fair usage of the Gemini API.
  */
 const chatRateLimit = new Map<string, { count: number; reset: number }>();
@@ -25,15 +25,20 @@ export async function proxy(request: NextRequest) {
 
   // 2. Granular Rate Limiting for AI Chat
   if (pathname.startsWith('/api/chat')) {
-    const userId = session?.value || request.ip || 'anonymous';
+    const ip =
+      (request as NextRequest & { ip?: string }).ip ||
+      request.headers.get('x-forwarded-for') ||
+      'anonymous';
+    const userId = session?.value || ip;
     const now = Date.now();
     const limit = chatRateLimit.get(userId);
 
     if (limit && now < limit.reset) {
-      if (limit.count >= 5) { // 5 requests per 1-minute window
+      if (limit.count >= 5) {
+        // 5 requests per 1-minute window
         return NextResponse.json(
           { error: 'Rate limit exceeded. Please wait a moment.' },
-          { status: 429 }
+          { status: 429 },
         );
       }
       limit.count++;

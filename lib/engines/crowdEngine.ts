@@ -2,9 +2,9 @@ import { CROWD_WEIGHTS, CONGESTION_THRESHOLDS, TREND_THRESHOLDS } from '../const
 
 /**
  * Metric vector for a specific venue zone
- * 
+ *
  * DESIGN DECISION: SEPARATION OF CONCERNS
- * This interface represents the "Sense" layer output. By isolating raw data 
+ * This interface represents the "Sense" layer output. By isolating raw data
  * from the scoring logic, we ensure the engine can be unit-tested without
  * browser dependencies or real-time sensor noise.
  */

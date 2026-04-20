@@ -13,7 +13,7 @@ const MOCK_ZONES = [
 
 /**
  * Operator Command Center
- * 
+ *
  * DESIGN DECISION: SEPARATION OF CONCERNS
  * The page acts as a "Controller" that aggregates data and orchestrates
  * the display, while cards and summaries handle their own internal rendering logic.
@@ -36,6 +36,20 @@ export default function OperatorPage() {
           <p className="text-sm opacity-60 mt-1 uppercase tracking-widest">
             Command & Control Interface
           </p>
+          <div className="flex space-x-4 mt-4">
+            <div className="flex items-center space-x-2">
+              <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+              <span className="text-[10px] font-bold uppercase tracking-widest opacity-80">
+                Systems: Operational
+              </span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
+              <span className="text-[10px] font-bold uppercase tracking-widest opacity-80">
+                Intelligence: Active
+              </span>
+            </div>
+          </div>
         </div>
         <div className="flex space-x-2">
           <button
@@ -57,12 +71,12 @@ export default function OperatorPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {activeTab === 'metrics' ? (
-          MOCK_ZONES.map((zone) => (
-            <MetricCard key={zone.id} {...zone} />
-          ))
+          MOCK_ZONES.map((zone) => <MetricCard key={zone.id} {...zone} />)
         ) : (
           <div className="lg:col-span-3 py-20 border border-dashed border-white/20 text-center">
-            <p className="text-xs uppercase tracking-widest opacity-40">No active automated nudges in the last 15 minutes</p>
+            <p className="text-xs uppercase tracking-widest opacity-40">
+              No active automated nudges in the last 15 minutes
+            </p>
           </div>
         )}
       </div>

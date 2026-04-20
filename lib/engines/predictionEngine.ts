@@ -29,11 +29,11 @@ export interface PredictionFeatures {
 
 /**
  * Rule-based fallback prediction using flow vectors and event modifiers.
- * 
+ *
  * DESIGN DECISION: HYBRID AI + FALLBACK MODEL
- * Large scale sports venues require deterministic reliability. We use 
- * a "Hybrid" model where this rule-based engine acts as the ground-truth 
- * safety layer, ensuring intelligence remains active even if external 
+ * Large scale sports venues require deterministic reliability. We use
+ * a "Hybrid" model where this rule-based engine acts as the ground-truth
+ * safety layer, ensuring intelligence remains active even if external
  * ML endpoints (Vertex AI) experience latency or connectivity issues.
  *
  * @param input - The current venue state and prediction horizon

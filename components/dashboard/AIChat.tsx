@@ -7,7 +7,7 @@ interface AIChatProps {
 
 /**
  * AI Assistant Chat Interface
- * 
+ *
  * FEATURES:
  * - Accessibility: aria-live, automated focus management, keyboard Esc support.
  * - Logic: Separated into useVenueAssistant hook.
@@ -45,28 +45,24 @@ export function AIChat({ onClose }: AIChatProps) {
 
     const textToSubmit = input;
     setInput('');
-    
+
     // Mock context for the hook demo
-    await sendMessage(textToSubmit, {
-      zones: {},
-      queues: {},
-      alerts: {},
-      userZone: 'Z1',
-      eventPhase: 'IN_GAME',
-    });
+    await sendMessage(textToSubmit);
   };
 
   return (
-    <div 
+    <div
       className="flex flex-col h-full bg-background border border-border sm:max-h-[600px] w-full"
       role="dialog"
       aria-labelledby="chat-title"
     >
       <div className="flex items-center justify-between p-4 border-b border-border bg-black text-white">
-        <h2 id="chat-title" className="font-bold uppercase tracking-widest text-xs">SVOS Assistant</h2>
+        <h2 id="chat-title" className="font-bold uppercase tracking-widest text-xs">
+          SVOS Assistant
+        </h2>
         {onClose && (
-          <button 
-            onClick={onClose} 
+          <button
+            onClick={onClose}
             className="hover:opacity-70 transition-opacity focus:outline-none focus:ring-2 focus:ring-white"
             aria-label="Close Assistant (Esc)"
           >
@@ -89,11 +85,7 @@ export function AIChat({ onClose }: AIChatProps) {
         )}
       </div>
 
-      <div 
-        ref={scrollRef} 
-        className="flex-1 overflow-y-auto p-4 space-y-4"
-        aria-live="polite"
-      >
+      <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4" aria-live="polite">
         {messages.map((m) => (
           <div key={m.id} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div

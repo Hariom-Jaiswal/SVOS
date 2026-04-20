@@ -2,8 +2,8 @@ import type { NextConfig } from 'next';
 
 /**
  * DESIGN DECISION: SECURITY HARDENING
- * We implement a multi-layered defense strategy with strict CSP, 
- * HSTS for transport security, and granular Permissions-Policy to 
+ * We implement a multi-layered defense strategy with strict CSP,
+ * HSTS for transport security, and granular Permissions-Policy to
  * minimize the attack surface of the venue operating system.
  */
 const securityHeaders = [
