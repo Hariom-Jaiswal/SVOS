@@ -7,8 +7,7 @@ README.md
 Dockerfile
 .dockerignore
 npm-debug.log
-WORKSPACE
-C:\Users\Adi\.gemini\antigravity\brain
-C:/Users/Adi/.gemini/antigravity/brain
-C:\Users\Adi\.gemini\antigravity\brain\0e26783e-fde1-41d5-92d9-502444efa9e3
-C:/Users/Adi/.gemini/antigravity/brain/0e26783e-fde1-41d5-92d9-502444efa9e3
+*.md
+jest.config.mjs
+__tests__
+coverage

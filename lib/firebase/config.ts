@@ -13,10 +13,12 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-// Initialize Firebase only if it hasn't been initialized
-const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+// Initialize Firebase only if it hasn't been initialized and we have an API key
+const app = (getApps().length > 0) 
+  ? getApp() 
+  : (process.env.NEXT_PUBLIC_FIREBASE_API_KEY ? initializeApp(firebaseConfig) : null);
 
-export const auth = getAuth(app);
-export const db = getDatabase(app);
+export const auth = app ? getAuth(app) : {} as ReturnType<typeof getAuth>;
+export const db = app ? getDatabase(app) : {} as ReturnType<typeof getDatabase>;
 
 export default app;
